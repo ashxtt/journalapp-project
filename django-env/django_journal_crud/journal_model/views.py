@@ -44,3 +44,6 @@ class EntryDetails(APIView):
 
     def delete(self, request, pk):
         print(request)
+        entry = get_object_or_404(Entry, pk=pk)
+        entry.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
