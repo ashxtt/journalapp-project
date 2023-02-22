@@ -6,7 +6,7 @@ from .models import Entry
 from django.shortcuts import get_object_or_404
 # Create your views here.
 
-class Entry(APIView):
+class EntryView(APIView):
     def get(self, request):
         #Index Res
         print(request)
@@ -26,14 +26,21 @@ class Entry(APIView):
 
 
 class EntryDetails(APIView):
-    def get(self, request):
+    def get(self, request, pk):
         print(request)
         entry = get_object_or_404(Entry, pk=pk)
         data = EntrySerializer(entry).data
         return Response(data)
 
-    def put(self, request):
+    def put(self, request, pk):
         print(request)
+        entry = get_object_or_404(Entry, pk=pk)
+        updated = EntrySerializer(entry, data=request.data, partial=True)
+        if updated.is_valid():
+            updated.save()
+            return Response(updated.data)
+        else:
+            return Response(updated.errors, status=status.HTTP_400_BAD_REQUEST)
 
-    def delete(self, request):
+    def delete(self, request, pk):
         print(request)
