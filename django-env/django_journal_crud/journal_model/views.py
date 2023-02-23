@@ -14,6 +14,7 @@ class EntryView(APIView):
         data = EntrySerializer(entry, many=True).data
         return Response(data)
     
+class EntryPost(APIView):    
     def post(self, request):
         print(request.data)
         journal = EntrySerializer(data=request.data)
